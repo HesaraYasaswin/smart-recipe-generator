@@ -1,70 +1,127 @@
-# Getting Started with Create React App
+# Smart Recipe Generator
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A modern React application built with Vite and TailwindCSS for creating and managing recipes with AI assistance.
 
-## Available Scripts
+## 🚀 Features
 
-In the project directory, you can run:
+- **Modern React Setup**: Built with Vite for fast development and building
+- **TailwindCSS**: Utility-first CSS framework for rapid UI development
+- **Component Architecture**: Organized component structure for maintainability
+- **Responsive Design**: Mobile-first responsive design approach
+- **Recipe Management**: Tools for creating, validating, and managing recipes
 
-### `npm start`
+## 📁 Project Structure
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+```
+src/
+├── components/          # Reusable UI components
+│   ├── Button.jsx      # Example button component
+│   └── index.js        # Component exports
+├── pages/              # Page components
+│   ├── Home.jsx        # Home page component
+│   └── index.js        # Page exports
+├── utils/              # Utility functions
+│   └── recipeUtils.js  # Recipe-related utilities
+├── App.jsx             # Main application component
+├── main.jsx            # Application entry point
+└── index.css           # Global styles with TailwindCSS
+```
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## 🛠️ Tech Stack
 
-### `npm test`
+- **React 19**: Latest React with modern features
+- **Vite**: Fast build tool and development server
+- **TailwindCSS**: Utility-first CSS framework
+- **PostCSS**: CSS processing with autoprefixer
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+## 🚀 Getting Started
 
-### `npm run build`
+### Prerequisites
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+- Node.js (version 16 or higher)
+- npm or yarn
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+### Installation
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+1. Clone the repository:
+```bash
+git clone <repository-url>
+cd smart-recipe-generator-2
+```
 
-### `npm run eject`
+2. Install dependencies:
+```bash
+npm install
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+3. Start the development server:
+```bash
+npm run dev
+```
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+4. Open your browser and navigate to `http://localhost:5173`
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+### Available Scripts
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
 
-## Learn More
+## 🎨 Styling
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+This project uses TailwindCSS for styling. The configuration is in `tailwind.config.js` and PostCSS configuration is in `postcss.config.js`.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+### Custom Components
 
-### Code Splitting
+The project includes a reusable `Button` component with multiple variants:
+- `primary` - Blue button for main actions
+- `secondary` - Gray button for secondary actions
+- `success` - Green button for success actions
+- `danger` - Red button for destructive actions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## 📝 Development
 
-### Analyzing the Bundle Size
+### Adding New Components
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+1. Create your component in the `src/components/` directory
+2. Export it from `src/components/index.js`
+3. Import and use it in your pages
 
-### Making a Progressive Web App
+### Adding New Pages
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+1. Create your page component in the `src/pages/` directory
+2. Export it from `src/pages/index.js`
+3. Add routing as needed
 
-### Advanced Configuration
+### Utility Functions
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Add utility functions to the `src/utils/` directory. The project includes example utilities for recipe operations in `recipeUtils.js`.
 
-### Deployment
+## 🔧 Configuration Files
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+- `vite.config.js` - Vite configuration
+- `tailwind.config.js` - TailwindCSS configuration
+- `postcss.config.js` - PostCSS configuration
+- `package.json` - Project dependencies and scripts
 
-### `npm run build` fails to minify
+## 📦 Build
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+To create a production build:
+
+```bash
+npm run build
+```
+
+The built files will be in the `dist/` directory.
+
+## 🤝 Contributing
+
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Test your changes
+5. Submit a pull request
+
+## 📄 License
+
+This project is licensed under the MIT License.
