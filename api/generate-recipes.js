@@ -1,5 +1,5 @@
 export default async function handler(req, res) {
-  console.log('🔧 API function called');
+  console.log(' API function called');
   
   // Enable CORS
   res.setHeader('Access-Control-Allow-Credentials', true);
@@ -11,32 +11,32 @@ export default async function handler(req, res) {
   );
 
   if (req.method === 'OPTIONS') {
-    console.log('🔄 Handling OPTIONS request');
+    console.log(' Handling OPTIONS request');
     res.status(200).end();
     return;
   }
 
   if (req.method !== 'POST') {
-    console.log('❌ Invalid method:', req.method);
+    console.log(' Invalid method:', req.method);
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
   const { ingredients, dietaryPreference, servings } = req.body;
-  console.log('🥘 Received ingredients:', ingredients);
-  console.log('🍽️ Received servings:', servings);
-  console.log('🥬 Received dietary preference:', dietaryPreference);
+  console.log(' Received ingredients:', ingredients);
+  console.log(' Received servings:', servings);
+  console.log(' Received dietary preference:', dietaryPreference);
   
   if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
-    console.log('❌ Invalid ingredients:', ingredients);
+    console.log(' Invalid ingredients:', ingredients);
     return res.status(400).json({ error: 'Ingredients array is required' });
   }
 
   const apiKey = process.env.OPENAI_API_KEY;
-  console.log('🔑 API Key exists:', !!apiKey);
-  console.log('🔑 API Key starts with:', apiKey ? apiKey.substring(0, 10) + '...' : 'NOT FOUND');
+  console.log(' API Key exists:', !!apiKey);
+  console.log(' API Key starts with:', apiKey ? apiKey.substring(0, 10) + '...' : 'NOT FOUND');
 
   if (!apiKey) {
-    console.error('❌ OpenAI API key not found in environment variables');
+    console.error(' OpenAI API key not found in environment variables');
     return res.status(500).json({ error: 'OpenAI API key not configured' });
   }
 
