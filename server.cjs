@@ -81,12 +81,51 @@ Suggested Substitutions:
 
     // Parse recipes
     const recipes = text.split(/\n{2,}/).map(block => {
+      console.log('🔍 Processing block:', block);
+      
       const titleMatch = block.match(/^Title:\s*(.+)$/m);
       const ingredientsMatch = block.match(/Ingredients:\s*([\s\S]*?)Instructions:/m);
-      const instructionsMatch = block.match(/Instructions:\s*([\s\S]*?)(?:Suggested Substitutions:|Title:|$)/m);
+      
+      // More robust instructions parsing
+      let instructions = [];
+      const instructionsStart = block.indexOf('Instructions:');
+      if (instructionsStart !== -1) {
+        let instructionsText = block.substring(instructionsStart + 'Instructions:'.length);
+        
+        // Find where instructions end (before Suggested Substitutions or next Title)
+        const substitutionsIndex = instructionsText.indexOf('Suggested Substitutions:');
+        const nextTitleIndex = instructionsText.indexOf('Title:');
+        
+        let endIndex = instructionsText.length;
+        if (substitutionsIndex !== -1 && (nextTitleIndex === -1 || substitutionsIndex < nextTitleIndex)) {
+          endIndex = substitutionsIndex;
+        } else if (nextTitleIndex !== -1) {
+          endIndex = nextTitleIndex;
+        }
+        
+        instructionsText = instructionsText.substring(0, endIndex).trim();
+        console.log('🔍 Raw instructions text:', instructionsText);
+        
+        // Split by lines and extract numbered steps
+        const lines = instructionsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+        console.log('🔍 Instruction lines:', lines);
+        
+                 instructions = lines
+           .filter(line => /^\d+\.\s*/.test(line))
+           .map(line => line.replace(/^\d+\.\s*/, '').trim())
+           .filter(Boolean);
+         
+         // If no numbered steps found, try alternative parsing
+         if (instructions.length === 0) {
+           instructions = lines.filter(line => line.length > 0);
+         }
+        
+        console.log('🔍 Extracted instructions:', instructions);
+      }
+      
       const substitutionsMatch = block.match(/Suggested Substitutions:\s*([\s\S]*)/m);
     
-      return {
+      const recipe = {
         title: titleMatch ? titleMatch[1].trim() : '',
         ingredients: ingredientsMatch
           ? ingredientsMatch[1]
@@ -94,14 +133,7 @@ Suggested Substitutions:
               .map(line => line.replace(/^- /, '').trim())
               .filter(Boolean)
           : [],
-        instructions: instructionsMatch
-          ? instructionsMatch[1]
-              .split('\n')
-              .map(line => line.trim())
-              .filter(line => /^\d+\.\s*/.test(line))
-              .map(line => line.replace(/^\d+\.\s*/, ''))
-              .filter(Boolean)
-          : [],
+        instructions: instructions,
         substitutions: substitutionsMatch
           ? substitutionsMatch[1]
               .split('\n')
@@ -109,6 +141,10 @@ Suggested Substitutions:
               .filter(Boolean)
           : [],
       };
+      
+      console.log('🔍 Final recipe instructions:', recipe.instructions);
+      console.log('🔍 Instructions length:', recipe.instructions.length);
+      return recipe;
     });
     
 

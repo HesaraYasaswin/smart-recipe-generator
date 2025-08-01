@@ -86,8 +86,12 @@ const IngredientInput = ({
   }
 
   // Handle suggestion click
-  const handleSuggestionClick = (suggestion) => {
+  const handleSuggestionClick = (suggestion, e) => {
+    e.preventDefault()
+    e.stopPropagation()
     addIngredient(suggestion)
+    setShowSuggestions(false)
+    setFocusedSuggestion(-1)
   }
 
   // Handle input change
@@ -101,7 +105,7 @@ const IngredientInput = ({
     setTimeout(() => {
       setShowSuggestions(false)
       setFocusedSuggestion(-1)
-    }, 200)
+    }, 300)
   }
 
   return (
@@ -152,8 +156,9 @@ const IngredientInput = ({
               <button
                 key={index}
                 type="button"
-                onClick={() => handleSuggestionClick(suggestion)}
-                className={`w-full px-4 py-2 text-left hover:bg-gray-100 focus:bg-gray-100 focus:outline-none ${
+                onClick={(e) => handleSuggestionClick(suggestion, e)}
+                onMouseDown={(e) => e.preventDefault()}
+                className={`w-full px-4 py-2 text-left hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition-colors ${
                   index === focusedSuggestion ? 'bg-blue-50 text-blue-900' : 'text-gray-900'
                 }`}
               >
@@ -165,7 +170,7 @@ const IngredientInput = ({
       </div>
 
       {/* Helper Text */}
-      <p className="text-sm text-gray-500">
+      <p className="text-sm text-white">
         Press Enter to add an ingredient, or click on a suggestion
       </p>
     </div>
