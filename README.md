@@ -2,9 +2,7 @@
 
 A modern, AI-powered web application that transforms leftover ingredients into delicious recipes. Built with React, Vite, and OpenAI API, deployed on Vercel.
 
-## 🌟 Live Demo
 
-**Visit the live application:** [https://smart-recipe-generator-kappa.vercel.app](https://smart-recipe-generator-kappa.vercel.app)
 
 ## ✨ Features
 
