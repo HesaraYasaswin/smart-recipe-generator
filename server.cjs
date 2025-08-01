@@ -25,10 +25,11 @@ app.post('/api/generate-recipes', async (req, res) => {
   const prompt = `
 Given the following ingredients: ${ingredients.join(', ')}
 
-Generate 1 unique recipe for ${servings} servings. For the recipe, provide:
+Generate 3 to 5 unique recipes for ${servings} servings. For each recipe, provide:
 - A creative title
 - A list of ingredients with quantities adjusted for ${servings} servings (use only the provided ones, but you may add common pantry items like salt, pepper, oil, water, etc.)
-- Simple, step-by-step cooking instructions
+- Prioritize recipes that **minimize food waste** by efficiently using all or most of the provided ingredients
+- Simple, step-by-step cooking instructions with a **minimum of 5 steps**, each step on a new line prefixed by "1. ", "2. ", etc.
 - If any ingredient is missing or uncommon, suggest a substitution and list it at the end as 'Suggested Substitutions:'
 ${dietaryText}
 
@@ -40,11 +41,17 @@ Ingredients:
 Instructions:
 1. Step one
 2. Step two
+3. Step three
+4. Step four
+5. Step five
+...
 
 If there are substitutions, add:
 Suggested Substitutions:
 - <original ingredient>: <suggestion>
 `;
+
+
 
   try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
@@ -63,37 +70,51 @@ Suggested Substitutions:
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('OpenAI API error:', errorText); // Log the actual error
+      console.error('OpenAI API error:', errorText);
       return res.status(500).json({ error: 'OpenAI API error', details: errorText });
     }
 
     const data = await response.json();
     const text = data.choices[0].message.content.trim();
 
+    console.log('OpenAI response text:\n', text); // For debugging
+
     // Parse recipes
     const recipes = text.split(/\n{2,}/).map(block => {
       const titleMatch = block.match(/^Title:\s*(.+)$/m);
       const ingredientsMatch = block.match(/Ingredients:\s*([\s\S]*?)Instructions:/m);
-      const instructionsMatch = block.match(/Instructions:\s*([\s\S]*?)(?:Suggested Substitutions:|$)/m);
+      const instructionsMatch = block.match(/Instructions:\s*([\s\S]*?)(?:Suggested Substitutions:|Title:|$)/m);
       const substitutionsMatch = block.match(/Suggested Substitutions:\s*([\s\S]*)/m);
-
+    
       return {
         title: titleMatch ? titleMatch[1].trim() : '',
         ingredients: ingredientsMatch
-          ? ingredientsMatch[1].split('\n').map(line => line.replace(/^- /, '').trim()).filter(Boolean)
+          ? ingredientsMatch[1]
+              .split('\n')
+              .map(line => line.replace(/^- /, '').trim())
+              .filter(Boolean)
           : [],
         instructions: instructionsMatch
-          ? instructionsMatch[1].split('\n').map(line => line.replace(/^\d+\.\s*/, '').trim()).filter(Boolean)
+          ? instructionsMatch[1]
+              .split('\n')
+              .map(line => line.trim())
+              .filter(line => /^\d+\.\s*/.test(line))
+              .map(line => line.replace(/^\d+\.\s*/, ''))
+              .filter(Boolean)
           : [],
         substitutions: substitutionsMatch
-          ? substitutionsMatch[1].split('\n').map(line => line.replace(/^- /, '').trim()).filter(Boolean)
+          ? substitutionsMatch[1]
+              .split('\n')
+              .map(line => line.replace(/^- /, '').trim())
+              .filter(Boolean)
           : [],
       };
     });
+    
 
     res.json({ recipes });
   } catch (err) {
-    console.error('Error in /api/generate-recipes:', err); // Add this line for catch block
+    console.error('Error in /api/generate-recipes:', err);
     res.status(500).json({ error: 'Server error', details: err.message });
   }
 });
