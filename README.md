@@ -82,45 +82,7 @@ smart-recipe-generator/
 - **OpenAI API key** (for recipe generation)
 - **Vercel account** (for deployment)
 
-### Local Development
 
-1. **Clone the repository**
-   ```bash
-   git clone <repository-url>
-   cd smart-recipe-generator
-   ```
-
-2. **Install dependencies**
-   ```bash
-   npm install
-   ```
-
-3. **Set up environment variables**
-   ```bash
-   cp env.example .env
-   ```
-   Add your OpenAI API key to the `.env` file:
-   ```
-   OPENAI_API_KEY=your_openai_api_key_here
-   ```
-
-4. **Start the development server**
-   ```bash
-   npm run dev
-   ```
-
-5. **Open your browser**
-   Navigate to `http://localhost:5173`
-
-**Note**: For local development, you'll need to set up the API endpoint. The app is configured to use Vercel serverless functions in production, but for local development, you can either:
-- Deploy to Vercel and use the production API
-- Set up a local development environment with the API
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
 
 ## 🚀 Deployment
 
@@ -147,25 +109,6 @@ smart-recipe-generator/
    vercel --prod
    ```
 
-### Alternative: Netlify Deployment
-
-1. **Build the project**
-   ```bash
-   npm run build
-   ```
-
-2. **Deploy to Netlify**
-   - Drag and drop the `dist` folder to Netlify, OR
-   - Use Netlify CLI:
-   ```bash
-   npm i -g netlify-cli
-   netlify deploy --prod --dir=dist
-   ```
-
-3. **Set environment variables**
-   - Go to Site settings > Environment variables
-   - Add `OPENAI_API_KEY`
-
 ## 🔧 Configuration
 
 ### Environment Variables
@@ -187,11 +130,6 @@ This project uses **TailwindCSS** for styling with:
 - Modern UI components
 - Smooth animations and transitions
 
-### Custom Components
-
-- **Button**: Multiple variants (primary, secondary, success, danger)
-- **IngredientInput**: Tag-based input with autocomplete
-- **RecipeCard**: Beautiful recipe display with ingredient highlighting
 
 ## 🔒 Security
 
@@ -200,37 +138,8 @@ This project uses **TailwindCSS** for styling with:
 - No API keys exposed in client-side code
 - CORS properly configured for production
 
-## 🤝 Contributing
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## 📝 Development Notes
-
-### API Integration
-- Uses Vercel serverless functions for API calls
-- Production: Vercel serverless function at `/api/generate-recipes`
-- Local development: Configure to use production API or set up local development environment
-
-### Error Handling
-- Comprehensive error handling for API failures
-- User-friendly error messages
-- Graceful fallbacks for network issues
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🙏 Acknowledgments
-
-- OpenAI for providing the GPT API
-- Vercel for hosting and serverless functions
-- The React and TailwindCSS communities
-- All contributors and testers
 
 ---
 
-**Built with ❤️ using Cursor AI and modern web technologies**
+**END**
