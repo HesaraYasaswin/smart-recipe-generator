@@ -2,8 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
+/* ✅ Reset default spacing and enforce layout consistency */
+html, body {
+  width: 100%;
+  height: 100%;
+  padding: 0;
   margin: 0;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevent horizontal scroll caused by zoomed layouts */
+}
+
+body {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
@@ -16,6 +25,7 @@ code {
     monospace;
 }
 
+/* 🔥 Glowing animations used in text */
 @keyframes glow {
   0%, 100% {
     text-shadow: 0 0 20px rgba(249, 115, 22, 0.3), 0 4px 8px rgba(0, 0, 0, 0.3);
