@@ -2,6 +2,7 @@ import React from 'react';
 import { ChefHat, Sparkles, ArrowRight } from "lucide-react";
 import heroBackground from "../assets/hero-background.jpg";
 
+// Home component for landing page
 const Home = ({ navigateTo }) => {
   return (
          <div

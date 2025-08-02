@@ -6,10 +6,10 @@ const IngredientInput = ({
   placeholder = "Add ingredients...",
   className = "" 
 }) => {
-  const [inputValue, setInputValue] = useState('')
-  const [suggestions, setSuggestions] = useState([])
-  const [showSuggestions, setShowSuggestions] = useState(false)
-  const [focusedSuggestion, setFocusedSuggestion] = useState(-1)
+  const [inputValue, setInputValue] = useState('') // State for the input field
+  const [suggestions, setSuggestions] = useState([]) // Autocomplete suggestions
+  const [showSuggestions, setShowSuggestions] = useState(false) // Dropdown visibility
+  const [focusedSuggestion, setFocusedSuggestion] = useState(-1) // Highlighted suggestion index
   const inputRef = useRef(null)
   const suggestionsRef = useRef(null)
 
@@ -24,7 +24,7 @@ const IngredientInput = ({
     'apple', 'banana', 'strawberry', 'blueberry', 'orange'
   ]
 
-  // Filter suggestions based on input
+  // Filter suggestions when the input value changes
   useEffect(() => {
     if (inputValue.trim()) {
       const filtered = commonIngredients.filter(ingredient =>
@@ -42,7 +42,7 @@ const IngredientInput = ({
     setFocusedSuggestion(-1)
   }, [inputValue, ingredients])
 
-  // Handle keyboard navigation
+  // Handle keyboard interactions (Enter, Arrow keys, Escape)
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault()
@@ -65,7 +65,7 @@ const IngredientInput = ({
     }
   }
 
-  // Add ingredient to the list
+  // Add a new ingredient to the list
   const addIngredient = (ingredient) => {
     const trimmedIngredient = ingredient.trim().toLowerCase()
     if (trimmedIngredient && !ingredients.some(existing => 

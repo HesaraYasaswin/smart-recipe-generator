@@ -1,31 +1,31 @@
-# 🍳 Smart Recipe Generator
+# Smart Recipe Generator
 
 A modern, AI-powered web application that transforms leftover ingredients into delicious recipes. Built with React, Vite, and OpenAI API, deployed on Vercel.
 
 
 
-## ✨ Features
+##  Features
 
-### 🎯 Core Functionality
+###  Core Functionality
 - **AI-Powered Recipe Generation**: Uses OpenAI GPT-3.5-turbo to create unique recipes from available ingredients
 - **Smart Ingredient Input**: Tag-based input system with autocomplete and ingredient suggestions
 - **Dietary Preferences**: Support for vegan, vegetarian, gluten-free, and dairy-free diets
 - **Portion Scaling**: Adjustable servings (1-8 people)
 - **Waste Minimization**: AI prioritizes recipes that use most/all provided ingredients
 
-### 🎨 User Experience
+###  User Experience
 - **Beautiful Recipe Cards**: Modern, responsive design with clear ingredient highlighting
 - **Ingredient Tracking**: Visual indicators showing which ingredients are used in each recipe
 - **Smart Suggestions**: AI-powered ingredient recommendations based on what you've added
 - **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
 
-### 🔧 Technical Features
+###  Technical Features
 - **Real-time AI Processing**: Instant recipe generation with detailed instructions
 - **Error Handling**: Graceful error handling with user-friendly messages
 - **Loading States**: Smooth loading animations and progress indicators
 - **CORS Support**: Properly configured for cross-origin requests
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 ### Frontend
 - **React 19**: Latest React with modern features and hooks
@@ -73,7 +73,7 @@ smart-recipe-generator/
 └── README.md              # Project documentation
 ```
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 
@@ -84,7 +84,7 @@ smart-recipe-generator/
 
 
 
-## 🚀 Deployment
+##  Deployment
 
 ### Vercel Deployment (Recommended)
 
@@ -109,20 +109,14 @@ smart-recipe-generator/
    vercel --prod
    ```
 
-## 🔧 Configuration
+##  Configuration
 
 ### Environment Variables
 
 - `OPENAI_API_KEY`: Your OpenAI API key (required for recipe generation)
 
-### Vercel Configuration
 
-The `vercel.json` file configures:
-- Static file serving
-- API route handling
-- SPA routing for React Router
-
-## 🎨 Styling
+##  Styling
 
 This project uses **TailwindCSS** for styling with:
 - Custom color palette optimized for food/cooking themes
@@ -131,7 +125,7 @@ This project uses **TailwindCSS** for styling with:
 - Smooth animations and transitions
 
 
-## 🔒 Security
+##  Security
 
 - API keys stored securely in environment variables
 - Serverless functions keep sensitive data server-side

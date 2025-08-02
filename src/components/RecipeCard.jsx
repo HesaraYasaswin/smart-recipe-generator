@@ -1,6 +1,7 @@
 import React from 'react';
 
 const RecipeCard = ({ recipe, inputIngredients = [] }) => {
+  // Create a Set of user-provided ingredients for quick lookup
   const inputSet = new Set(inputIngredients.map(i => i.trim().toLowerCase()));
 
   // Simplified instruction parsing
@@ -16,6 +17,7 @@ const RecipeCard = ({ recipe, inputIngredients = [] }) => {
 
   const steps = parseInstructions(recipe.instructions);
 
+  // Handles saving the recipe content to a .txt file
   const handleSaveRecipe = () => {
     let recipeContent = `${recipe.title}\n${'='.repeat(recipe.title.length)}\n\n`;
     if (recipe.description) {

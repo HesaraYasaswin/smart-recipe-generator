@@ -1,9 +1,9 @@
-# 🚀 Deployment Guide
+#  Deployment Guide
 
 Complete guide for deploying the Smart Recipe Generator to production.
 
 
-## 🎯 Quick Start (Recommended: Vercel)
+##  Quick Start (Recommended: Vercel)
 
 ### Step 1: Prepare Your Project
 
@@ -14,12 +14,6 @@ Complete guide for deploying the Smart Recipe Generator to production.
    # Should see: package.json, vercel.json, api/generate-recipes.js, etc.
    ```
 
-2. **Test locally first**
-   ```bash
-   npm install
-   npm run dev
-   # Visit http://localhost:5173 to test
-   ```
 
 ### Step 2: Deploy to Vercel
 

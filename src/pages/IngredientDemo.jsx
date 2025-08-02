@@ -5,7 +5,7 @@ import { generateRecipes } from '../utils/generateRecipes'
 import RecipeCard from '../components/RecipeCard'
 import ingredientsBackground from "../assets/ingredients-background.jpg"; 
 
-
+// Options for dietary preferences dropdown
 const DIETARY_OPTIONS = [
   { value: '', label: 'Any Diet' },
   { value: 'vegan', label: '🌱 Vegan' },
@@ -15,6 +15,7 @@ const DIETARY_OPTIONS = [
 ]
 
 const IngredientDemo = ({ navigateTo }) => {
+  // State hooks to manage form inputs and UI state
   const [ingredients, setIngredients] = useState([])
   const [recipeName, setRecipeName] = useState('')
   const [recipes, setRecipes] = useState([])
@@ -25,9 +26,12 @@ const IngredientDemo = ({ navigateTo }) => {
   const [showSuggestionsSidebar, setShowSuggestionsSidebar] = useState(false)
   const [suggestedIngredients, setSuggestedIngredients] = useState([])
 
+  // Called when ingredients list changes from IngredientInput component
   const handleIngredientsChange = (newIngredients) => {
     setIngredients(newIngredients)
     
+    // If user has added ingredients but no recipes yet,
+    // show suggestions sidebar with related suggestions
     if (newIngredients.length > 0 && recipes.length === 0) {
       setShowSuggestionsSidebar(true)
       const relatedSuggestions = getRelatedSuggestions(newIngredients)
@@ -37,6 +41,7 @@ const IngredientDemo = ({ navigateTo }) => {
     }
   }
 
+  // Generate related ingredient suggestions based on current ingredients
   const getRelatedSuggestions = (currentIngredients) => {
     const ingredientCategories = {
       proteins: ['chicken', 'beef', 'pork', 'lamb', 'turkey', 'duck', 'tofu', 'tempeh', 'fish', 'shrimp', 'salmon', 'tuna', 'cod', 'tilapia', 'eggs', 'bacon', 'ham', 'sausage', 'ground beef', 'chicken breast', 'chicken thighs', 'pork chops', 'steak', 'lobster', 'crab', 'mussels', 'clams', 'anchovies', 'sardines'],
@@ -50,14 +55,15 @@ const IngredientDemo = ({ navigateTo }) => {
       condiments: ['ketchup', 'mustard', 'mayonnaise', 'hot sauce', 'soy sauce', 'fish sauce', 'worcestershire sauce', 'balsamic vinegar', 'apple cider vinegar', 'red wine vinegar', 'white wine vinegar', 'rice vinegar', 'mirin', 'miso', 'tahini', 'hummus', 'pesto', 'salsa', 'guacamole', 'aioli', 'tzatziki', 'ranch dressing', 'blue cheese dressing', 'caesar dressing', 'vinaigrette', 'honey', 'maple syrup', 'agave nectar', 'molasses', 'jam', 'jelly', 'marmalade', 'chutney', 'relish', 'pickles', 'olives', 'capers', 'anchovies', 'sundried tomatoes', 'roasted red peppers']
     }
     
-    const suggestions = new Set()
+    const suggestions = new Set() // Set to store unique suggestions
     
+    // Check each current ingredient and add related items from same category (up to 4)
     currentIngredients.forEach(ing => {
       Object.entries(ingredientCategories).forEach(([category, items]) => {
         if (items.some(item => ing.toLowerCase().includes(item))) {
           items
             .filter(item => !currentIngredients.some(ci => ci.toLowerCase().includes(item)))
-            .slice(0, 4)
+            .slice(0, 4) // limit to 4 suggestions per matching category
             .forEach(item => suggestions.add(item))
         }
       })
@@ -67,15 +73,16 @@ const IngredientDemo = ({ navigateTo }) => {
     Object.entries(ingredientCategories).forEach(([category, items]) => {
       const randomItems = items
         .filter(item => !currentIngredients.some(ci => ci.toLowerCase().includes(item)))
-        .filter(item => !suggestions.has(item))
-        .sort(() => Math.random() - 0.5)
-        .slice(0, 2)
+        .filter(item => !suggestions.has(item)) // avoid duplicates
+        .sort(() => Math.random() - 0.5)  // shuffle
+        .slice(0, 2) // take 2 random items
       randomItems.forEach(item => suggestions.add(item))
     })
     
-    return Array.from(suggestions).slice(0, 12)
+    return Array.from(suggestions).slice(0, 12) // Return max 12 suggestions as an array
   }
 
+  // Adds a suggested ingredient to the user's ingredient list when clicked
   const addSuggestedIngredient = (ingredient) => {
     if (!ingredients.includes(ingredient)) {
       const newIngredients = [...ingredients, ingredient]
@@ -85,6 +92,7 @@ const IngredientDemo = ({ navigateTo }) => {
     }
   }
 
+   // Clear all user inputs and reset states
   const handleClearAll = () => {
     setIngredients([])
     setRecipes([])
@@ -92,6 +100,7 @@ const IngredientDemo = ({ navigateTo }) => {
     setShowSuggestionsSidebar(false)
   }
 
+  // Trigger recipe generation using async function from utils
   const handleGenerateRecipe = async () => {
     if (ingredients.length === 0) {
       setError('Please add some ingredients first!')
@@ -101,6 +110,7 @@ const IngredientDemo = ({ navigateTo }) => {
     setError('')
     setRecipes([])
     try {
+      // Call the external function passing current ingredients, diet, and servings
       const result = await generateRecipes(ingredients, dietaryPreference, servings)
       setRecipes(result)
       setShowSuggestionsSidebar(false)
@@ -111,6 +121,7 @@ const IngredientDemo = ({ navigateTo }) => {
     }
   }
 
+  // JSX rendering starts here
   return (
     <div
       className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 relative overflow-hidden"
