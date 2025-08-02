@@ -1,20 +1,43 @@
-require('dotenv').config();
-const express = require('express');
-const cors = require('cors');
-const fetch = (...args) => import('node-fetch').then(mod => mod.default(...args));
+export default async function handler(req, res) {
+  console.log('🔧 API function called');
+  
+  // Enable CORS
+  res.setHeader('Access-Control-Allow-Credentials', true);
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET,DELETE,PATCH,POST,PUT');
+  res.setHeader(
+    'Access-Control-Allow-Headers',
+    'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version'
+  );
 
-const app = express();
-const PORT = 5001;
+  if (req.method === 'OPTIONS') {
+    console.log('🔄 Handling OPTIONS request');
+    res.status(200).end();
+    return;
+  }
 
-app.use(cors());
-app.use(express.json());
+  if (req.method !== 'POST') {
+    console.log('❌ Invalid method:', req.method);
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
 
-app.post('/api/generate-recipes', async (req, res) => {
   const { ingredients, dietaryPreference, servings } = req.body;
+  console.log('🥘 Received ingredients:', ingredients);
+  console.log('🍽️ Received servings:', servings);
+  console.log('🥬 Received dietary preference:', dietaryPreference);
+  
+  if (!ingredients || !Array.isArray(ingredients) || ingredients.length === 0) {
+    console.log('❌ Invalid ingredients:', ingredients);
+    return res.status(400).json({ error: 'Ingredients array is required' });
+  }
+
   const apiKey = process.env.OPENAI_API_KEY;
+  console.log('🔑 API Key exists:', !!apiKey);
+  console.log('🔑 API Key starts with:', apiKey ? apiKey.substring(0, 10) + '...' : 'NOT FOUND');
 
   if (!apiKey) {
-    return res.status(500).json({ error: 'OpenAI API key not set on server.' });
+    console.error('❌ OpenAI API key not found in environment variables');
+    return res.status(500).json({ error: 'OpenAI API key not configured' });
   }
 
   let dietaryText = '';
@@ -51,9 +74,9 @@ Suggested Substitutions:
 - <original ingredient>: <suggestion>
 `;
 
-
-
   try {
+    console.log('Making request to OpenAI API...');
+    
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
@@ -68,6 +91,8 @@ Suggested Substitutions:
       }),
     });
 
+    console.log('OpenAI response status:', response.status);
+
     if (!response.ok) {
       const errorText = await response.text();
       console.error('OpenAI API error:', errorText);
@@ -75,24 +100,25 @@ Suggested Substitutions:
     }
 
     const data = await response.json();
+    console.log('OpenAI response received');
+    
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      console.error('Invalid OpenAI response format:', data);
+      return res.status(500).json({ error: 'Invalid response from OpenAI' });
+    }
+
     const text = data.choices[0].message.content.trim();
+    console.log('Parsing recipes from response...');
 
-    console.log('OpenAI response text:\n', text); // For debugging
-
-    // Parse recipes
     const recipes = text.split(/\n{2,}/).map(block => {
-      console.log('🔍 Processing block:', block);
-      
       const titleMatch = block.match(/^Title:\s*(.+)$/m);
       const ingredientsMatch = block.match(/Ingredients:\s*([\s\S]*?)Instructions:/m);
       
-      // More robust instructions parsing
       let instructions = [];
       const instructionsStart = block.indexOf('Instructions:');
       if (instructionsStart !== -1) {
         let instructionsText = block.substring(instructionsStart + 'Instructions:'.length);
         
-        // Find where instructions end (before Suggested Substitutions or next Title)
         const substitutionsIndex = instructionsText.indexOf('Suggested Substitutions:');
         const nextTitleIndex = instructionsText.indexOf('Title:');
         
@@ -104,28 +130,22 @@ Suggested Substitutions:
         }
         
         instructionsText = instructionsText.substring(0, endIndex).trim();
-        console.log('🔍 Raw instructions text:', instructionsText);
         
-        // Split by lines and extract numbered steps
         const lines = instructionsText.split('\n').map(line => line.trim()).filter(line => line.length > 0);
-        console.log('🔍 Instruction lines:', lines);
         
-                 instructions = lines
-           .filter(line => /^\d+\.\s*/.test(line))
-           .map(line => line.replace(/^\d+\.\s*/, '').trim())
-           .filter(Boolean);
+        instructions = lines
+          .filter(line => /^\d+\.\s*/.test(line))
+          .map(line => line.replace(/^\d+\.\s*/, '').trim())
+          .filter(Boolean);
          
-         // If no numbered steps found, try alternative parsing
-         if (instructions.length === 0) {
-           instructions = lines.filter(line => line.length > 0);
-         }
-        
-        console.log('🔍 Extracted instructions:', instructions);
+        if (instructions.length === 0) {
+          instructions = lines.filter(line => line.length > 0);
+        }
       }
       
       const substitutionsMatch = block.match(/Suggested Substitutions:\s*([\s\S]*)/m);
     
-      const recipe = {
+      return {
         title: titleMatch ? titleMatch[1].trim() : '',
         ingredients: ingredientsMatch
           ? ingredientsMatch[1]
@@ -141,20 +161,12 @@ Suggested Substitutions:
               .filter(Boolean)
           : [],
       };
-      
-      console.log('🔍 Final recipe instructions:', recipe.instructions);
-      console.log('🔍 Instructions length:', recipe.instructions.length);
-      return recipe;
-    });
-    
+    }).filter(recipe => recipe.title && recipe.ingredients.length > 0);
 
+    console.log(`Generated ${recipes.length} recipes`);
     res.json({ recipes });
   } catch (err) {
     console.error('Error in /api/generate-recipes:', err);
     res.status(500).json({ error: 'Server error', details: err.message });
   }
-});
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+} 
